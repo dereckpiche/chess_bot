@@ -33,7 +33,7 @@ def main():
     if color=="b":
         while (board.is_checkmate()==False):
             print("The engine is thinking...")
-            board.push_uci(play(board, depth-2, ch.WHITE))
+            board.push_uci(play(board, depth, ch.WHITE))
             print(board)
             board=getHumanMove(board)
             print(board)
@@ -44,7 +44,7 @@ def main():
             board=getHumanMove(board)
             print(board)
             print("The engine is thinking...")
-            board.push_uci(play(board, depth-2, ch.BLACK))
+            board.push_uci(play(board, depth, ch.BLACK))
         print(board.outcome())
     board.reset
     main()
