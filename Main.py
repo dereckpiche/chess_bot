@@ -1,51 +1,65 @@
 import ChessEngine as ce
 import chess as ch
 
-#get the human's move
-def getHumanMove(board):
-    print(board.legal_moves)
-    print("""To undo your last move, type "undo".""")
-    play = input("Your move: ")
-    if (play=="undo"):
-        board.pop()
-        board.pop()
-        getHumanMove(board)
-        return
-    board.push_san(play)
-    return board
+class Main:
 
+    def __init__(self, board=ch.Board):
+        self.board=board
 
-#get engine's move
-def play(board, depth, color):
-    engine = ce.Engine(board, depth, color)
-    return engine.engine()
+    #play human move
+    def playHumanMove(self):
+        try:
+            print(self.board.legal_moves)
+            print("""To undo your last move, type "undo".""")
+            #get human move
+            play = input("Your move: ")
+            if (play=="undo"):
+                self.board.pop()
+                self.board.pop()
+                self.playHumanMove()
+                return
+            self.board.push_san(play)
+        except:
+            self.playHumanMove()
 
-#start a game
-def main():
-    board = ch.Board()
-    #get human player's color
-    color=None
-    while(color!="b" and color!="w"):
-        color = input("""Play as (type "b" or "w"): """)
-    depth=None
-    while(isinstance(depth, int)==False):
-        depth = int(input("""Choose depth: """))
-    if color=="b":
-        while (board.is_checkmate()==False):
-            print("The engine is thinking...")
-            board.push_uci(play(board, depth, ch.WHITE))
-            print(board)
-            board=getHumanMove(board)
-            print(board)
-        print(board.outcome())    
-    elif color=="w":
-        while (board.is_checkmate()==False):
-            print(board)
-            board=getHumanMove(board)
-            print(board)
-            print("The engine is thinking...")
-            board.push_uci(play(board, depth, ch.BLACK))
-        print(board.outcome())
-    board.reset
-    main()
-main()
+    #play engine move
+    def playEngineMove(self, maxDepth, color):
+        engine = ce.Engine(self.board, maxDepth, color)
+        self.board.push(engine.getBestMove())
+
+    #start a game
+    def startGame(self):
+        #get human player's color
+        color=None
+        while(color!="b" and color!="w"):
+            color = input("""Play as (type "b" or "w"): """)
+        maxDepth=None
+        while(isinstance(maxDepth, int)==False):
+            maxDepth = int(input("""Choose depth: """))
+        if color=="b":
+            while (self.board.is_checkmate()==False):
+                print("The engine is thinking...")
+                self.playEngineMove(maxDepth, ch.WHITE)
+                print(self.board)
+                self.playHumanMove()
+                print(self.board)
+            print(self.board)
+            print(self.board.outcome())    
+        elif color=="w":
+            while (self.board.is_checkmate()==False):
+                print(self.board)
+                self.playHumanMove()
+                print(self.board)
+                print("The engine is thinking...")
+                self.playEngineMove(maxDepth, ch.BLACK)
+            print(self.board)
+            print(self.board.outcome())
+        #reset the board
+        self.board.reset
+        #start another game
+        self.startGame()
+
+#create an instance and start a game
+newBoard= ch.Board()
+game = Main(newBoard)
+bruh = game.startGame()

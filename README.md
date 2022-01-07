@@ -1,6 +1,6 @@
-# chessEngine
+# ChessEngine
 
-Date of completion: January 06, 2022.
+Date of completion: January 07, 2022.
 Creator: Dereck Piche.
 
 The computing core of this basic chess engine is located in the ChessEngine.py file.
