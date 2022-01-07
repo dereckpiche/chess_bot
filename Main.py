@@ -18,7 +18,7 @@ def getHumanMove(board):
 #get engine's move
 def play(board, depth, color):
     engine = ce.Engine(board, depth, color)
-    return engine.getBestMove()
+    return engine.engine()
 
 #start a game
 def main():
