@@ -3,7 +3,7 @@ import random as rd
 
 class Engine:
 
-    def __init__(self, board=None, maxDepth=None, color=None):
+    def __init__(self, board, maxDepth, color):
         self.board=board
         self.color=color
         self.maxDepth=maxDepth
@@ -15,9 +15,9 @@ class Engine:
         compt = 0
         #Sums up the material values
         for i in range(64):
-            compt=compt+self.squareResPoints(ch.SQUARES[i])
-        compt = compt + self.mateOpportunity() + self.openning()
-        return compt + 0.001*rd.random()
+            compt+=self.squareResPoints(ch.SQUARES[i])
+        compt += self.mateOpportunity() + self.openning() + 0.001*rd.random()
+        return compt
 
     def mateOpportunity(self):
         if (self.board.legal_moves.count()==0):
